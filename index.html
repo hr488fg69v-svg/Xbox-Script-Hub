@@ -2,65 +2,379 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080d12">
+<meta name="description" content="Persönlicher Script Hub mit Lua-Editor und lokaler Bibliothek">
 <title>Xbox Script Hub</title>
 <style>
-:root{color-scheme:dark;--bg:#080d12;--panel:#121c26;--panel2:#192633;--green:#70ff8b;--muted:#a4b3c2}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f2f6f9;font:20px "Segoe UI",sans-serif}
-header{display:flex;justify-content:space-between;align-items:center;padding:22px 28px;border-bottom:1px solid #2b3b49}
-h1{font-size:28px;margin:0;color:var(--green);letter-spacing:2px}header small{color:var(--muted)}
-.app{display:grid;grid-template-columns:250px 1fr;gap:18px;padding:18px;max-width:1400px;margin:auto}
-aside,main{background:var(--panel);border:1px solid #233341;border-radius:14px;padding:18px}
-button{font:inherit;color:#f2f6f9;background:var(--panel2);border:2px solid #2a3c4b;border-radius:10px;padding:14px 16px;cursor:pointer;text-align:left}
-button:focus{outline:3px solid var(--green);outline-offset:2px;border-color:var(--green)}
-nav{display:grid;gap:10px}nav button[aria-current="page"]{border-color:var(--green);color:var(--green)}
-h2{margin-top:4px}p{line-height:1.45}.muted{color:var(--muted)}
-.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.tile{background:#0d151d;border:1px solid #283947;border-radius:12px;padding:18px}
-label{display:block;margin:12px 0 8px}
-textarea,input{width:100%;background:#070b10;color:var(--green);border:1px solid #354958;border-radius:10px;padding:14px;font:17px ui-monospace,monospace}
-textarea{min-height:270px;resize:vertical}
-.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.actions button{flex:1}
-.primary{background:#174c29;border-color:#26733d}
-pre{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--green);background:#070b10;padding:14px;border-radius:10px;min-height:60px}
-[hidden]{display:none!important}
-@media(max-width:760px){.app{grid-template-columns:1fr}.tiles{grid-template-columns:1fr}header{padding:16px}}
+:root {
+  color-scheme: dark;
+  --bg: #080d12;
+  --panel: #121c26;
+  --panel2: #192633;
+  --green: #70ff8b;
+  --muted: #a4b3c2;
+  --border: #2b3b49;
+}
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html {
+  min-height: 100%;
+  background: var(--bg);
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--bg);
+  color: #f2f6f9;
+  font: 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+}
+h1 {
+  margin: 0;
+  color: var(--green);
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+header small {
+  color: var(--muted);
+  font-size: 12px;
+}
+.app {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+  padding: 16px;
+}
+aside,
+main {
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid #233341;
+  border-radius: 14px;
+  padding: 16px;
+}
+nav {
+  display: grid;
+  gap: 9px;
+}
+button {
+  min-height: 48px;
+  padding: 12px 14px;
+  font: inherit;
+  color: #f2f6f9;
+  background: var(--panel2);
+  border: 1px solid #354958;
+  border-radius: 11px;
+  cursor: pointer;
+  text-align: left;
+  touch-action: manipulation;
+}
+button:active {
+  transform: scale(.99);
+}
+button:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 2px;
+}
+nav button[aria-current="page"] {
+  border-color: var(--green);
+  color: var(--green);
+  background: #10251a;
+}
+h2 {
+  margin: 4px 0 12px;
+  font-size: 23px;
+}
+h3 {
+  margin-top: 0;
+}
+p {
+  line-height: 1.5;
+}
+.muted {
+  color: var(--muted);
+}
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.tile {
+  min-width: 0;
+  padding: 16px;
+  background: #0d151d;
+  border: 1px solid #283947;
+  border-radius: 12px;
+}
+.tile button {
+  width: 100%;
+}
+label {
+  display: block;
+  margin: 14px 0 8px;
+}
+textarea,
+input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  background: #070b10;
+  color: var(--green);
+  border: 1px solid #354958;
+  border-radius: 10px;
+  padding: 14px;
+  font: 16px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+textarea {
+  min-height: 250px;
+  resize: vertical;
+  line-height: 1.5;
+  tab-size: 2;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+.actions button {
+  flex: 1 1 150px;
+}
+.primary {
+  background: #174c29;
+  border-color: #26733d;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--green);
+  background: #070b10;
+  padding: 14px;
+  border-radius: 10px;
+  min-height: 60px;
+  line-height: 1.5;
+}
+[hidden] {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  header {
+    padding: 16px;
+    align-items: flex-start;
+  }
+  h1 {
+    font-size: 21px;
+  }
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+  aside,
+  main {
+    padding: 14px;
+  }
+  nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  nav button {
+    text-align: center;
+    padding: 10px 6px;
+    overflow-wrap: anywhere;
+  }
+  .tiles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  textarea {
+    min-height: 220px;
+  }
+  .actions button {
+    flex-basis: 100%;
+  }
+}
+@media (max-width: 360px) {
+  header small {
+    font-size: 10px;
+  }
+  h1 {
+    font-size: 18px;
+  }
+  nav {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 </style>
 </head>
 <body>
-<header><div><h1>⬡ SCRIPT HUB</h1><small>PERSONAL DEV TOOLKIT</small></div><small>XBOX DEV MODE</small></header>
+<header>
+  <div>
+    <h1>⬡ SCRIPT HUB</h1>
+    <small>PERSONAL DEV TOOLKIT</small>
+  </div>
+  <small>XBOX DEV MODE</small>
+</header>
 <div class="app">
-<aside><nav aria-label="Hauptnavigation">
-<button data-page="dashboard" aria-current="page">⌂　Dashboard</button>
-<button data-page="editor">⌘　Script Editor</button>
-<button data-page="library">▤　Bibliothek</button>
-<button data-page="test">▶　Test-Labor</button>
-</nav><p class="muted">Prototyp · keine Roblox-Verbindung</p></aside>
-<main>
-<section id="dashboard"><h2>Dein Workspace</h2><p class="muted">Ein Controller-freundlicher Platz zum Schreiben und Organisieren eigener Scripts.</p>
-<div class="tiles">
-<div class="tile"><h3>⌘ Script Editor</h3><p>Lua-Beispiele bearbeiten und verwalten.</p><button data-page="editor">Editor öffnen →</button></div>
-<div class="tile"><h3>▤ Bibliothek</h3><p>Deinen letzten Entwurf lokal speichern.</p><button data-page="library">Bibliothek öffnen →</button></div>
-<div class="tile"><h3>▶ Test-Labor</h3><p>Textprüfung ohne Codeausführung.</p><button data-page="test">Test-Labor öffnen →</button></div>
-<div class="tile"><h3>◈ Status</h3><p>Eigenständige Oberfläche. Kein Zugriff auf laufende Roblox-Spiele.</p></div>
-</div></section>
-<section id="editor" hidden><h2>Script Editor</h2><p class="muted">Schreibe deinen eigenen Lua-Entwurf. Der Code wird hier nicht ausgeführt.</p>
-<label for="code">Lua-Entwurf</label><textarea id="code" spellcheck="false">-- Mein Script
+  <aside>
+    <nav aria-label="Hauptnavigation">
+      <button data-page="dashboard" aria-current="page">⌂ Dashboard</button>
+      <button data-page="editor">⌘ Script Editor</button>
+      <button data-page="library">▤ Bibliothek</button>
+      <button data-page="test">▶ Test-Labor</button>
+    </nav>
+    <p class="muted">Prototyp · keine Roblox-Verbindung</p>
+  </aside>
+  <main>
+    <section id="dashboard">
+      <h2>Dein Workspace</h2>
+      <p class="muted">
+        Ein Controller-freundlicher Platz zum Schreiben und
+        Organisieren eigener Scripts.
+      </p>
+      <div class="tiles">
+        <div class="tile">
+          <h3>⌘ Script Editor</h3>
+          <p>Lua-Beispiele bearbeiten und verwalten.</p>
+          <button data-page="editor">Editor öffnen →</button>
+        </div>
+        <div class="tile">
+          <h3>▤ Bibliothek</h3>
+          <p>Deinen letzten Entwurf lokal speichern.</p>
+          <button data-page="library">Bibliothek öffnen →</button>
+        </div>
+        <div class="tile">
+          <h3>▶ Test-Labor</h3>
+          <p>Textprüfung ohne Codeausführung.</p>
+          <button data-page="test">Test-Labor öffnen →</button>
+        </div>
+        <div class="tile">
+          <h3>◈ Status</h3>
+          <p>
+            Eigenständige Oberfläche. Kein Zugriff auf laufende
+            Roblox-Spiele.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section id="editor" hidden>
+      <h2>Script Editor</h2>
+      <p class="muted">
+        Schreibe deinen eigenen Lua-Entwurf. Der Code wird hier
+        nicht ausgeführt.
+      </p>
+      <label for="code">Lua-Entwurf</label>
+      <textarea id="code" spellcheck="false"
+        autocapitalize="off" autocomplete="off"
+        autocorrect="off">-- Mein Script
 print("Hallo, Xbox Script Hub!")</textarea>
-<div class="actions"><button class="primary" id="save">Entwurf speichern</button><button id="check">Text prüfen</button></div><p id="status" class="muted" aria-live="polite"></p></section>
-<section id="library" hidden><h2>Bibliothek</h2><p class="muted">Der letzte Entwurf wird lokal in diesem Browser gespeichert, sofern der Speicher verfügbar ist.</p>
-<div class="actions"><button id="load">Gespeicherten Entwurf laden</button><button id="example">Beispiel einsetzen</button></div><pre id="libstatus">Noch nichts geladen.</pre></section>
-<section id="test" hidden><h2>Test-Labor</h2><p class="muted">Diese Prüfung zählt Zeilen und erkennt einfache print()-Aufrufe. Sie führt keinen Lua-Code aus und verändert Roblox nicht.</p>
-<button class="primary" id="runcheck">Aktuellen Text prüfen</button><pre id="result">Bereit.</pre></section>
-</main></div>
+      <div class="actions">
+        <button class="primary" id="save">Entwurf speichern</button>
+        <button id="check">Text prüfen</button>
+      </div>
+      <p id="status" class="muted" aria-live="polite"></p>
+    </section>
+    <section id="library" hidden>
+      <h2>Bibliothek</h2>
+      <p class="muted">
+        Der letzte Entwurf wird lokal in diesem Browser gespeichert,
+        sofern der Speicher verfügbar ist.
+      </p>
+      <div class="actions">
+        <button id="load">Gespeicherten Entwurf laden</button>
+        <button id="example">Beispiel einsetzen</button>
+      </div>
+      <pre id="libstatus">Noch nichts geladen.</pre>
+    </section>
+    <section id="test" hidden>
+      <h2>Test-Labor</h2>
+      <p class="muted">
+        Diese Prüfung zählt Zeilen und erkennt einfache
+        print()-Aufrufe. Sie führt keinen Lua-Code aus.
+      </p>
+      <button class="primary" id="runcheck">Aktuellen Text prüfen</button>
+      <pre id="result">Bereit.</pre>
+    </section>
+  </main>
+</div>
 <script>
-const pages=[...document.querySelectorAll("main section")],nav=[...document.querySelectorAll("nav button")],code=document.querySelector("#code");
-function go(id){pages.forEach(p=>p.hidden=p.id!==id);nav.forEach(b=>b.setAttribute("aria-current",b.dataset.page===id?"page":"false"))}
-document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
-function check(){const s=code.value;document.querySelector("#result").textContent="Textprüfung abgeschlossen\nZeilen: "+s.split("\n").length+"\nZeichen: "+s.length+"\nprint()-Aufrufe: "+[...s.matchAll(/\bprint\s*\(/g)].length+"\n\nKein Code ausgeführt." ;go("test")}
-document.querySelector("#save").onclick=()=>{try{localStorage.setItem("xsh-code",code.value);document.querySelector("#status").textContent="Entwurf lokal gespeichert."}catch{document.querySelector("#status").textContent="Speichern nicht verfügbar; kopiere den Code an einen sicheren Ort."}};
-document.querySelector("#check").onclick=check;document.querySelector("#runcheck").onclick=check;
-document.querySelector("#load").onclick=()=>{try{const s=localStorage.getItem("xsh-code");if(s===null){document.querySelector("#libstatus").textContent="Kein gespeicherter Entwurf.";return}code.value=s;document.querySelector("#libstatus").textContent="Entwurf in den Editor geladen ("+s.length+" Zeichen)."}catch{document.querySelector("#libstatus").textContent="Lokaler Speicher nicht verfügbar."}};
-document.querySelector("#example").onclick=()=>{code.value='-- Mein Script\nprint("Hallo, Xbox Script Hub!")\n';go("editor")};
+const pages = [...document.querySelectorAll("main section")];
+const nav = [...document.querySelectorAll("nav button")];
+const code = document.querySelector("#code");
+function go(id) {
+  pages.forEach(page => {
+    page.hidden = page.id !== id;
+  });
+  nav.forEach(button => {
+    if (button.dataset.page === id) {
+      button.setAttribute("aria-current", "page");
+    } else {
+      button.removeAttribute("aria-current");
+    }
+  });
+}
+document.querySelectorAll("[data-page]").forEach(button => {
+  button.addEventListener("click", () => go(button.dataset.page));
+});
+function check() {
+  const text = code.value;
+  const printCalls = [...text.matchAll(/\bprint\s*\(/g)].length;
+  document.querySelector("#result").textContent =
+    "Textprüfung abgeschlossen\n" +
+    "Zeilen: " + text.split("\n").length + "\n" +
+    "Zeichen: " + text.length + "\n" +
+    "print()-Aufrufe: " + printCalls + "\n\n" +
+    "Kein Code ausgeführt.";
+  go("test");
+}
+document.querySelector("#save").addEventListener("click", () => {
+  try {
+    localStorage.setItem("xsh-code", code.value);
+    document.querySelector("#status").textContent =
+      "Entwurf lokal gespeichert.";
+  } catch {
+    document.querySelector("#status").textContent =
+      "Speichern nicht verfügbar. Kopiere deinen Code an einen sicheren Ort.";
+  }
+});
+document.querySelector("#check").addEventListener("click", check);
+document.querySelector("#runcheck").addEventListener("click", check);
+document.querySelector("#load").addEventListener("click", () => {
+  try {
+    const saved = localStorage.getItem("xsh-code");
+    if (saved === null) {
+      document.querySelector("#libstatus").textContent =
+        "Kein gespeicherter Entwurf.";
+      return;
+    }
+    code.value = saved;
+    document.querySelector("#libstatus").textContent =
+      "Entwurf in den Editor geladen (" + saved.length + " Zeichen).";
+  } catch {
+    document.querySelector("#libstatus").textContent =
+      "Lokaler Speicher nicht verfügbar.";
+  }
+});
+document.querySelector("#example").addEventListener("click", () => {
+  code.value =
+    '-- Mein Script\nprint("Hallo, Xbox Script Hub!")\n';
+  go("editor");
+});
 </script>
-</body></html>
+</body>
+</html>
